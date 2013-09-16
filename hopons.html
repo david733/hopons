@@ -1,0 +1,132 @@
+<head>
+	<title>hopons</title>
+</head>
+
+<body>
+	{{> page}}
+</body>
+
+<template name="page">
+	<div class="container">
+		
+		<!-- Header -->
+		<div class="row">
+			<div class="span12">
+				<h1>Hop-ons</h1>
+				<p>Carpool page for {{greeting}}</p>
+			</div>
+		</div>
+
+		<!-- Form for adding new drivers and riders -->
+		<div class="row">
+			<div class="span12">
+				<h3>Add yourself!</h3>
+				<form class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="newname">Name</label>
+						<div class="controls">
+							<input type="text" id="newname" class="" placeholder="Name" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="newemail">Email</label>
+						<div class="controls">
+							<input type="text" id="newemail" class="" placeholder="Email" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="newlocation">Departing from</label>
+						<div class="controls">
+							<input type="text" id="newlocation" class="" placeholder="Address or lat,lng" />
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls btn-group">
+							<!-- Button to trigger modal -->
+							<a href="#driver-modal" role="button" class="btn btn-primary" data-toggle="modal">Can drive</a>
+							<button type="button" class="btn btn-primary add-rider">Need ride</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<!-- Where the riders and drivers are displayed -->
+		<div class="row">
+			<div class="span6">
+				<p>The following people need rides:</p>
+				<ul id="riderlist" class="unstyled">
+					{{#each riders}}
+						{{> rider}}
+					{{/each}}
+				</ul>
+			</div>
+			<div class="span6">
+				<p>The following people can give rides:</p>
+				<ul id="driverlist" class="unstyled">
+					{{#each drivers}}
+						{{> driver}}
+					{{/each}}
+				</ul>
+			</div>
+		</div>
+
+		<!-- Modal asking driver for more info -->
+		<div id="driver-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="myModalLabel">How many people can you take in your vehicle?</h3>
+			</div>
+			<div class="modal-body">
+				<select id="newseats">
+					<option>1</option><option>2</option><option>3</option><option>4</option>
+					<option>5</option><option>6</option><option>7</option><option>more than 7</option>
+				</select>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				<button class="btn btn-primary add-driver" data-dismiss="modal" >Submit</button>
+			</div>
+		</div>
+
+</template>
+
+<template name="driver">
+	<li>
+		<div class="well">
+			{{name}} <a href="mailto:{{email}}" target="_blank" class="mailer"><i class="icon-envelope"></i></a> from {{location}} has {{seats}} seats.
+			<a href="#" class="remove-driver pull-right close">&times;</a>
+			<!-- <button type="button" class="btn-mini btn-inverse add-rider-to-driver">add rider</button> -->
+			<br/>
+			<ol class="">
+				{{#each riders}}
+					{{> rider}}
+				{{/each}}
+			</ol>
+		</div>
+	</li>
+</template>
+
+<template name="rider">
+	<li>
+		<span class="badge">
+			{{name}} <a href="mailto:{{email}}" target="_blank" class="mailer"><i class="icon-envelope icon-white"></i></a> from {{location}}
+			&nbsp; &nbsp; &nbsp; 
+			<a href="#" class="remove-rider"><i class="icon-remove icon-white"></i></a>
+			<!-- Dropdown menu -->
+			<span class="dropdown">
+				<a href="#" class="move-rider dropdown-toggle" data-toggle="dropdown"><i class="icon-chevron-right icon-white"></i></a> <!--dropdown trigger, arrow button -->
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+					{{#each drivers}}
+						<li><a tabindex="-1" href="#" class="driver-select">{{name}} from {{location}}</a></li>
+					{{/each}}
+					{{#if hasdriver}}
+						<li class="divider"></li>
+						<li><a tabindex="-1" href="#" class="driver-unselect">Need ride</a></li>
+					{{/if}}
+				</ul>
+			</span>
+			<!-- End dropdown -->
+		</span>
+	</li>
+</template>
